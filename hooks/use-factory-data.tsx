@@ -7,42 +7,68 @@ import { subscribeCalls } from '../lib/firebase/calls-service';
 import { subscribeCompanies } from '../lib/firebase/companies-service';
 import { isFirebaseConfigured } from '../lib/firebase/firebase-config';
 import { subscribeLines } from '../lib/firebase/lines-service';
-import { subscribeOperators } from '../lib/firebase/operators-service';
 import { subscribeProblems } from '../lib/firebase/problems-service';
-import { subscribePreventiveWorks } from '../lib/firebase/preventive-works-service';
 import { subscribeTechnicians } from '../lib/firebase/technicians-service';
-import { subscribeTokens } from '../lib/firebase/tokens-service';
 import { subscribeUsers } from '../lib/firebase/users-service';
-import { subscribeAssets } from '../lib/firebase/assets-service';
 import { getUserRole, hasPortalRole } from '../lib/firebase/auth-service';
 import { useAuthContext } from './auth-context';
 import { modules as demoModules } from '../components/mock-data';
 import type { PortalModule } from '../components/portal-types';
-import type { Asset, Company, DeviceToken, FactoryCall, Operator, PortalUser, PreventiveWork, Problem, ProductionLine, Technician } from '../types/firebase-models';
+import type { Company, DeviceToken, FactoryCall, Operator, PortalUser, PreventiveWork, Problem, ProductionLine, Technician } from '../types/firebase-models';
 
 const text = (value?: string | number | null) => value === undefined || value === null || value === '' ? '—' : String(value);
 const statusLabel = (value?: string) => ({ waiting: 'Naujas', accepted: 'Priskirtas', repairing: 'Vykdomas', completed: 'Uždarytas' }[value ?? ''] ?? value ?? '—');
+const emptyOperators: Operator[] = [];
+const emptyTokens: DeviceToken[] = [];
+const emptyPreventiveWorks: PreventiveWork[] = [];
 
 export function useFactoryData() {
   const [calls, setCalls] = useState<FactoryCall[]>([]);
   const [technicians, setTechnicians] = useState<Technician[]>([]);
-  const [operators, setOperators] = useState<Operator[]>([]);
+  const operators = emptyOperators;
   const [companies, setCompanies] = useState<Company[]>([]);
   const [lines, setLines] = useState<ProductionLine[]>([]);
   const [problems, setProblems] = useState<Problem[]>([]);
   const [users, setUsers] = useState<PortalUser[]>([]);
-  const [tokens, setTokens] = useState<DeviceToken[]>([]);
-  const [preventiveWorks, setPreventiveWorks] = useState<PreventiveWork[]>([]);
-  const [assets, setAssets] = useState<Asset[]>([]);
+  const tokens = emptyTokens;
+  const preventiveWorks = emptyPreventiveWorks;
   const [loading, setLoading] = useState(isFirebaseConfigured());
-  const [error, setError] = useState(false);
+  const [listenerErrors, setListenerErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (!isFirebaseConfigured()) { setLoading(false); return; }
-    let active = true; let remaining = 10;
-    const ready = () => { remaining -= 1; if (active && remaining <= 0) setLoading(false); };
-    const failed = () => { if (active) setError(true); ready(); };
-    const unsubscribers = [subscribeCalls([], items => { if (active) setCalls(items); ready(); }, failed), subscribeTechnicians([], items => { if (active) setTechnicians(items); ready(); }, failed), subscribeOperators([], items => { if (active) setOperators(items); ready(); }, failed), subscribeCompanies([], items => { if (active) setCompanies(items); ready(); }, failed), subscribeLines([], items => { if (active) setLines(items); ready(); }, failed), subscribeProblems([], items => { if (active) setProblems(items); ready(); }, failed), subscribeUsers([], items => { if (active) setUsers(items); ready(); }, failed), subscribeTokens([], items => { if (active) setTokens(items); ready(); }, failed), subscribePreventiveWorks([], items => { if (active) setPreventiveWorks(items); ready(); }, failed), subscribeAssets(items => { if (active) setAssets(items); ready(); }, failed)];
+    let active = true;
+    let remaining = 6;
+    const completedPaths = new Set<string>();
+    const ready = (path: string) => {
+      if (completedPaths.has(path)) return;
+      completedPaths.add(path);
+      remaining -= 1;
+      if (active && remaining <= 0) setLoading(false);
+    };
+    const failed = (path: string) => (reason: Error) => {
+      if (active) setListenerErrors(current => ({ ...current, [path]: reason.message }));
+      ready(path);
+    };
+    const received = <T,>(path: string, update: (items: T[]) => void) => (items: T[]) => {
+      if (active) {
+        update(items);
+        setListenerErrors(current => {
+          if (!(path in current)) return current;
+          const { [path]: _ignored, ...remainingErrors } = current;
+          return remainingErrors;
+        });
+      }
+      ready(path);
+    };
+    const unsubscribers = [
+      subscribeCalls([], received('calls', setCalls), failed('calls')),
+      subscribeTechnicians([], received('technicians', setTechnicians), failed('technicians')),
+      subscribeCompanies([], received('companies', setCompanies), failed('companies')),
+      subscribeLines([], received('lines', setLines), failed('lines')),
+      subscribeProblems([], received('problems', setProblems), failed('problems')),
+      subscribeUsers([], received('users', setUsers), failed('users')),
+    ];
     return () => { active = false; unsubscribers.forEach(unsubscribe => unsubscribe()); };
   }, []);
 
@@ -65,7 +91,7 @@ export function useFactoryData() {
     if (notifications) bySlug.pranesimai = { ...notifications, rows: tokens.map(item => [text(item.id), 'Registruotas įrenginys', text(item.userId), '—', 'Aktyvus', text(item.updatedAt)]) };
     return bySlug;
   }, [calls, technicians, operators, companies, lines, problems, users, tokens]);
-  return { calls, technicians, operators, companies, lines, problems, users, tokens, preventiveWorks, assets, liveModules, loading, error, configured: isFirebaseConfigured() };
+  return { calls, technicians, operators, companies, lines, problems, users, tokens, preventiveWorks, liveModules, loading, error: false, listenerErrors, configured: isFirebaseConfigured() };
 }
 
 /** Protects route access when Firebase is configured without creating data listeners. */

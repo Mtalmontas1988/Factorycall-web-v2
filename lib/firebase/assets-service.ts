@@ -1,5 +1,6 @@
 import { get, onValue, push, ref, remove, set, update } from 'firebase/database';
 import { getFirebaseDatabase } from './firebase-config';
+import { logFirebaseListenerError } from './realtime-service';
 import type { Asset, AssetStatus } from '../../types/firebase-models';
 
 export const ASSETS_PATH = 'assets';
@@ -32,9 +33,14 @@ export const subscribeAssets = (onData: (assets: Asset[]) => void, onError?: (er
       const raw = snapshot.val();
       const assets = raw && typeof raw === 'object' ? Object.entries(raw as Record<string, unknown>).map(([id, value]) => toAsset(id, value)) : [];
       onData(assets);
-    }, error => onError?.(error));
+    }, error => {
+      logFirebaseListenerError(ASSETS_PATH, error, database);
+      onError?.(error);
+    });
   } catch (error) {
-    onError?.(error instanceof Error ? error : new Error('Nepavyko prijungti Assets listenerio.'));
+    const reason = error instanceof Error ? error : new Error('Nepavyko prijungti Assets listenerio.');
+    logFirebaseListenerError(ASSETS_PATH, reason);
+    onError?.(reason);
     return () => undefined;
   }
 };

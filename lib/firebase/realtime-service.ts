@@ -1,13 +1,26 @@
-import { DataSnapshot, get, onValue, push, ref, remove, set, update } from 'firebase/database';
-import { getFirebaseDatabase, isFirebaseConfigured } from './firebase-config';
+import { type Database, DataSnapshot, get, onValue, push, ref, remove, set, update } from 'firebase/database';
+import { getFirebaseAuth, getFirebaseDatabase, isFirebaseConfigured } from './firebase-config';
 import type { FirebaseId, FirebaseRecord } from '../../types/firebase-models';
 
 export const snapshotToList = <T extends FirebaseRecord>(snapshot: DataSnapshot): T[] => Object.entries(snapshot.val() ?? {}).map(([id, value]) => ({ id, ...(value as Omit<T, 'id'>) } as T));
 
+export function logFirebaseListenerError(path: string, error: Error, database: Database | null = getFirebaseDatabase()) {
+  console.error('Firebase listener failed', {
+    path,
+    authUid: getFirebaseAuth()?.currentUser?.uid ?? null,
+    databaseURL: database?.app.options.databaseURL ?? null,
+    error,
+  });
+}
+
 export function subscribeCollection<T extends FirebaseRecord>(path: string, fallback: T[], callback: (items: T[]) => void, onError?: (error: Error) => void) {
   const database = getFirebaseDatabase();
   if (!database || !isFirebaseConfigured()) { callback(fallback); return () => undefined; }
-  return onValue(ref(database, path), snapshot => callback(snapshotToList<T>(snapshot)), error => { console.error(`Firebase listener failed: ${path}`, error); onError?.(error); callback(fallback); });
+  return onValue(ref(database, path), snapshot => callback(snapshotToList<T>(snapshot)), error => {
+    logFirebaseListenerError(path, error, database);
+    onError?.(error);
+    callback(fallback);
+  });
 }
 
 export async function deleteRecord(path: string, id: FirebaseId) {
