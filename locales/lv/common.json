@@ -1,0 +1,3 @@
+{
+  "common.language": "Valoda", "common.save": "Saglabāt", "common.cancel": "Atcelt", "common.search": "Meklēt", "common.loading": "Ielādē…", "common.error": "Radās kļūda", "common.delete": "Dzēst", "common.edit": "Rediģēt", "portal.dashboard": "Panelis", "portal.search": "Meklēt portālā…", "portal.darkMode": "Tumšais režīms", "dashboard.title": "Panelis", "dashboard.subtitle": "Ražošanas apkopes pārskats reāllaikā", "dashboard.newCall": "Jauns izsaukums", "login.email": "E-pasts", "login.password": "Parole", "login.submit": "Pieteikties", "login.title": "Pieteikšanās"
+}

@@ -1,0 +1,3 @@
+{
+  "common.language": "Language", "common.save": "Save", "common.cancel": "Cancel", "common.search": "Search", "common.loading": "Loading…", "common.error": "An error occurred", "common.delete": "Delete", "common.edit": "Edit", "portal.dashboard": "Dashboard", "portal.search": "Search portal…", "portal.darkMode": "Dark mode", "dashboard.title": "Dashboard", "dashboard.subtitle": "Real-time production maintenance overview", "dashboard.newCall": "New call", "login.email": "Email", "login.password": "Password", "login.submit": "Sign in", "login.title": "Sign in"
+}

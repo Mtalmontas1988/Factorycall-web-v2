@@ -1,0 +1,248 @@
+{
+  "common.language": "Kalba",
+  "common.save": "Išsaugoti",
+  "common.cancel": "Atšaukti",
+  "common.search": "Ieškoti",
+  "common.loading": "Įkeliama…",
+  "common.error": "Įvyko klaida",
+  "common.delete": "Pašalinti",
+  "common.edit": "Redaguoti",
+  "common.add": "Pridėti",
+  "common.new": "Naujas",
+  "common.open": "Atidaryti",
+  "common.close": "Uždaryti",
+  "common.reset": "Atstatyti",
+  "common.all": "Visi",
+  "common.none": "Nėra",
+  "common.notSpecified": "Nenurodyta",
+  "common.noName": "Be pavadinimo",
+  "common.actions": "Veiksmai",
+  "common.status": "Būsena",
+  "common.priority": "Prioritetas",
+  "common.name": "Pavadinimas",
+  "common.email": "El. paštas",
+  "common.phone": "Telefonas",
+  "common.code": "Kodas",
+  "common.description": "Aprašymas",
+  "common.recordsNotFound": "Įrašų nerasta.",
+  "common.active": "Aktyvus",
+  "common.inactive": "Neaktyvus",
+  "common.activePlural": "Aktyvūs",
+  "common.inactivePlural": "Neaktyvūs",
+  "common.allActivity": "Visi aktyvumai",
+  "common.confirmDelete": "Pašalinti įrašą?",
+  "common.confirmDeleteText": "Ar tikrai norite pašalinti šį įrašą? Veiksmo grąžinti negalima.",
+  "common.saving": "Saugoma…",
+  "common.deleting": "Šalinama…",
+  "common.range": "{{from}}–{{to}} iš {{count}}",
+  "common.saveError": "Nepavyko išsaugoti pakeitimų. Patikrinkite Firebase teises.",
+  "common.deleteError": "Nepavyko pašalinti įrašo. Jis gali turėti susijusių duomenų arba trūksta prieigos teisių.",
+  "navigation.dashboard": "Dashboard",
+  "navigation.management": "Valdymas",
+  "navigation.calls": "Iškvietimai",
+  "navigation.liveCalls": "Gyvi iškvietimai",
+  "navigation.history": "Istorija",
+  "navigation.statistics": "Statistika",
+  "navigation.reports": "Ataskaitos",
+  "navigation.technicians": "Technikai",
+  "navigation.operators": "Operatoriai",
+  "navigation.companies": "Įmonės",
+  "navigation.lines": "Linijos",
+  "navigation.faults": "Gedimai",
+  "navigation.assets": "Įrenginiai",
+  "navigation.inventory": "Sandėlis",
+  "navigation.preventiveWorks": "Prevenciniai darbai",
+  "navigation.ai": "AI",
+  "navigation.users": "Vartotojai",
+  "navigation.administrators": "Administratoriai",
+  "navigation.roles": "Rolės ir teisės",
+  "navigation.fcm": "FCM diagnostika",
+  "navigation.notifications": "Pranešimai",
+  "navigation.settings": "Nustatymai",
+  "portal.search": "Ieškoti portale…",
+  "portal.darkMode": "Tamsus režimas",
+  "portal.database": "Firebase Realtime Database",
+  "portal.loadingAccess": "Tikrinama prieiga…",
+  "portal.loadError": "Nepavyko įkelti Firebase duomenų. Patikrinkite ryšį ir Firebase taisykles.",
+  "portal.moduleInPreparation": "Modulis ruošiamas",
+  "portal.moduleUnavailable": "Šiai funkcijai dabartinėje Firebase struktūroje nėra patvirtintos duomenų šakos.",
+  "dashboard.title": "Dashboard",
+  "dashboard.subtitle": "Gamybos priežiūros apžvalga realiu laiku",
+  "dashboard.newCall": "Naujas iškvietimas",
+  "dashboard.activeFaults": "Aktyvūs gedimai",
+  "dashboard.waitingTechnician": "Laukia techniko",
+  "dashboard.repairsInProgress": "Vykdomi remontai",
+  "dashboard.completedToday": "Užbaigti šiandien",
+  "dashboard.averageResponseTime": "Vidutinis reakcijos laikas",
+  "dashboard.averageRepairTime": "Vidutinis remonto laikas",
+  "dashboard.minutes": "{{count}} min.",
+  "dashboard.recentFaults": "Naujausi gedimai",
+  "dashboard.lastTenCalls": "Paskutiniai 10 iškvietimų",
+  "dashboard.noFaults": "Gedimų nėra",
+  "dashboard.recentNotifications": "Naujausi pranešimai",
+  "dashboard.lastEvents": "Paskutiniai sistemos įvykiai",
+  "dashboard.quickActions": "Greiti veiksmai",
+  "dashboard.openNotifications": "Atidaryti pranešimus",
+  "dashboard.line": "Linija",
+  "dashboard.fault": "Gedimas",
+  "dashboard.technician": "Technikas",
+  "dashboard.time": "Laikas",
+  "dashboard.unassigned": "Nepriskirtas",
+  "dashboard.systemNotification": "Sistemos pranešimas",
+  "dashboard.noAdditionalInformation": "Be papildomos informacijos",
+  "calls.new": "Naujas",
+  "calls.assigned": "Priskirtas",
+  "calls.inProgress": "Vykdomas",
+  "calls.completed": "Užbaigtas",
+  "calls.waitingTechnician": "Laukia techniko",
+  "calls.allStatuses": "Visos būsenos",
+  "calls.search": "Ieškoti pagal ID arba aprašymą",
+  "calls.number": "Numeris",
+  "calls.operator": "Operatorius",
+  "calls.created": "Sukurta",
+  "calls.updated": "Atnaujinta",
+  "calls.lineNotSpecified": "Linija nenurodyta",
+  "calls.faultNotSpecified": "Gedimo tipas nenurodytas",
+  "calls.technicianNotAssigned": "Technikas nepriskirtas",
+  "calls.openFault": "Atidaryti gedimą",
+  "notifications.title": "Pranešimai",
+  "notifications.markAllRead": "Pažymėti visus perskaitytais",
+  "notifications.empty": "Pranešimų nėra",
+  "notifications.system": "Sistemos pranešimas",
+  "notifications.noDetails": "Be papildomos informacijos",
+  "notifications.viewAll": "Peržiūrėti visus",
+  "notifications.unread": "Neperskaityta: {{count}}",
+  "notifications.clearRead": "Išvalyti perskaitytus",
+  "notifications.read": "Perskaityti",
+  "notifications.unreadFilter": "Neperskaityti",
+  "notifications.period": "Laikotarpis",
+  "notifications.today": "Šiandien",
+  "notifications.yesterday": "Vakar",
+  "notifications.older": "Senesni",
+  "notifications.lastSevenDays": "Paskutinės 7 dienos",
+  "notifications.lastThirtyDays": "Paskutinės 30 dienų",
+  "notifications.found": "Rasta: {{count}}",
+  "notifications.new": "Naujas",
+  "notifications.timeNotSpecified": "Laikas nenurodytas",
+  "notifications.event.newCall": "Naujas iškvietimas",
+  "notifications.event.callAccepted": "Iškvietimas priimtas",
+  "notifications.event.technicianArrived": "Technikas atvyko",
+  "notifications.event.repairStarted": "Remontas pradėtas",
+  "notifications.event.callCompleted": "Iškvietimas užbaigtas",
+  "notifications.event.preventiveCreated": "Sukurtas prevencinis darbas",
+  "notifications.event.preventiveDue": "Artėja prevencinis darbas",
+  "notifications.event.preventiveOverdue": "Prevencinis darbas pradelstas",
+  "login.email": "El. paštas",
+  "login.password": "Slaptažodis",
+  "login.submit": "Prisijungti",
+  "login.title": "Prisijungimas",
+  "login.welcome": "Sveiki sugrįžę",
+  "login.subtitle": "Prisijunkite prie FactoryCall darbo aplinkos.",
+  "login.required": "Įveskite el. paštą ir slaptažodį.",
+  "login.noAccess": "Šis vartotojas neturi administratoriaus arba vadovo prieigos.",
+  "login.failed": "Prisijungti nepavyko. Patikrinkite el. paštą, slaptažodį ir Firebase nustatymus.",
+  "login.demo": "Atidaryti demonstracinį portalą",
+  "login.demoMode": "Demonstracinis režimas · Firebase nekonfigūruota",
+  "company.title": "Įmonės informacija",
+  "company.subtitle": "Įmonių kontaktai, darbo laikas ir logotipai realiu laiku",
+  "company.new": "Nauja įmonė",
+  "company.mainInformation": "Pagrindinė informacija",
+  "company.changeLogo": "Keisti logotipą",
+  "company.workingHours": "Darbo laikas",
+  "company.companyCode": "Įmonės kodas",
+  "company.vatCode": "PVM kodas",
+  "company.contactPerson": "Kontaktinis asmuo",
+  "company.website": "Interneto svetainė",
+  "company.timezone": "Laiko zona",
+  "company.city": "Miestas",
+  "company.country": "Šalis",
+  "company.address": "Adresas",
+  "company.workingDays": "Darbo dienos",
+  "company.shifts": "Pamainos",
+  "company.lunchBreak": "Pietų pertrauka",
+  "company.workStart": "Darbo pradžia",
+  "company.workEnd": "Darbo pabaiga",
+  "company.separateWithCommas": "Atskirkite kableliais",
+  "company.locationNotSpecified": "Vieta nenurodyta",
+  "company.notFound": "Įmonių nėra.",
+  "company.deleteTitle": "Pašalinti įmonę?",
+  "company.deleteText": "Ar tikrai norite pašalinti „{{name}}“? Valdomas logotipas bus pašalintas kartu su įmonės įrašu.",
+  "company.deleteScheduled": "Įmonė bus pašalinta po 6 sekundžių.",
+  "company.validationName": "Nurodykite įmonės pavadinimą.",
+  "company.validationEmail": "Nurodykite teisingą el. pašto adresą.",
+  "company.validationWebsite": "Nuoroda turi prasidėti http:// arba https://",
+  "company.validationWorkEnd": "Darbo pabaiga turi būti vėlesnė už pradžią.",
+  "company.saveError": "Nepavyko išsaugoti įmonės. Patikrinkite Firebase prieigą ir bandykite dar kartą.",
+  "company.deleteError": "Nepavyko pašalinti įmonės. Ji gali turėti susijusių duomenų arba trūksta prieigos teisių."
+  ,"company.search": "Ieškoti pagal pavadinimą, kodą ar kontaktus"
+  ,"company.contact": "Kontaktas"
+  ,"company.workingHoursColumn": "Darbo laikas"
+  ,"company.settings": "Įmonės nustatymai"
+  ,"crud.newRecord": "Naujas įrašas"
+  ,"crud.recordDetails": "Įrašo detalės"
+  ,"crud.search": "Ieškoti"
+  ,"crud.sort": "Rūšiuoti"
+  ,"crud.edit": "Redaguoti"
+  ,"crud.delete": "Pašalinti"
+  ,"crud.noRecords": "Įrašų nerasta."
+  ,"crud.saveError": "Nepavyko išsaugoti pakeitimų. Patikrinkite Firebase teises."
+  ,"crud.deleteError": "Nepavyko pašalinti įrašo. Jis gali turėti susijusių duomenų arba trūksta prieigos teisių."
+  ,"crud.allActivity": "Visi aktyvumai"
+  ,"crud.active": "Aktyvūs"
+  ,"crud.inactive": "Neaktyvūs"
+  ,"technicians.title": "Technikai"
+  ,"technicians.subtitle": "Technikų prieinamumas, atsakomybės ir darbo apkrova realiu laiku"
+  ,"technicians.search": "Ieškoti techniko"
+  ,"technicians.notFound": "Technikų nerasta"
+  ,"technicians.changeFilters": "Pakeiskite filtrus arba paieškos frazę."
+  ,"technicians.profile": "Techniko profilis"
+  ,"technicians.administratorActions": "Administratoriaus veiksmai"
+  ,"technicians.responsibilities": "Atsakomybės"
+  ,"technicians.lines": "Linijos"
+  ,"technicians.lastLogin": "Paskutinis prisijungimas"
+  ,"technicians.activeCalls": "Aktyvūs iškvietimai"
+  ,"technicians.completedToday": "Užbaigta šiandien"
+  ,"technicians.noCalls": "Iškvietimų nėra."
+  ,"technicians.notNamed": "Neįvardytas technikas"
+  ,"liveCalls.title": "Gyvi iškvietimai"
+  ,"liveCalls.subtitle": "Realiu laiku atnaujinamas administratoriaus iškvietimų valdymas"
+  ,"liveCalls.search": "Ieškoti pagal ID arba aprašymą"
+  ,"assets.title": "Įrenginiai"
+  ,"assets.subtitle": "Gamybos įrenginių registras, būklė ir garantijų kontrolė realiu laiku."
+  ,"assets.add": "Pridėti įrenginį"
+  ,"assets.edit": "Redaguoti įrenginį"
+  ,"assets.notFound": "Įrenginių nerasta"
+  ,"assets.loading": "Įkeliami įrenginiai…"
+  ,"assets.view": "Peržiūrėti"
+  ,"assets.copyQr": "Kopijuoti QR reikšmę"
+  ,"reports.title": "PDF ataskaitos"
+  ,"reports.subtitle": "Eksportas naudoja tik realiu laiku gautus Firebase duomenis."
+  ,"reports.type": "Ataskaitos tipas"
+  ,"reports.allCompanies": "Visos įmonės"
+  ,"reports.pdf": "Generuoti PDF"
+  ,"reports.excel": "Eksportuoti Excel"
+  ,"reports.csv": "Eksportuoti CSV"
+  ,"reports.printHelp": "PDF atidaromas spausdinimo lange. Pasirinkite „Išsaugoti kaip PDF“."
+  ,"reports.ready": "Paruošta eksportui: {{count}} įrašų."
+  ,"reports.fault": "Gedimo ataskaita"
+  ,"reports.technicians": "Technikų darbo ataskaita"
+  ,"reports.kpi": "KPI ataskaita"
+  ,"reports.daily": "Dienos ataskaita"
+  ,"reports.monthly": "Mėnesio ataskaita"
+  ,"statistics.waiting": "Laukiantys"
+  ,"statistics.activeTechnicians": "Aktyvūs technikai"
+  ,"statistics.preventiveToday": "Prevenciniai šiandien"
+  ,"statistics.lines": "Linijos"
+  ,"recentCalls.title": "Paskutiniai 10 gedimų"
+  ,"recentCalls.subtitle": "Realiu laiku atnaujinami iškvietimai"
+  ,"recentCalls.empty": "Gedimų nėra"
+  ,"recentCalls.open": "Atidaryti gedimą"
+  ,"recentCalls.unnamedLine": "Linija nenurodyta"
+  ,"recentCalls.unnamedFault": "Gedimo tipas nenurodytas"
+  ,"recentCalls.unassignedTechnician": "Technikas nepriskirtas"
+  ,"recentCalls.agoMinutes": "prieš {{count}} min."
+  ,"common.critical": "Kritinis"
+  ,"common.high": "Aukštas"
+  ,"common.medium": "Vidutinis"
+  ,"common.low": "Žemas"
+}

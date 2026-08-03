@@ -1,0 +1,3 @@
+{
+  "common.language": "Keel", "common.save": "Salvesta", "common.cancel": "Tühista", "common.search": "Otsi", "common.loading": "Laadimine…", "common.error": "Tekkis viga", "common.delete": "Kustuta", "common.edit": "Muuda", "portal.dashboard": "Töölaud", "portal.search": "Otsi portaalist…", "portal.darkMode": "Tume režiim", "dashboard.title": "Töölaud", "dashboard.subtitle": "Tootmishoolduse ülevaade reaalajas", "dashboard.newCall": "Uus väljakutse", "login.email": "E-post", "login.password": "Parool", "login.submit": "Logi sisse", "login.title": "Sisselogimine"
+}

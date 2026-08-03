@@ -1,0 +1,3 @@
+{
+  "common.language": "Język", "common.save": "Zapisz", "common.cancel": "Anuluj", "common.search": "Szukaj", "common.loading": "Ładowanie…", "common.error": "Wystąpił błąd", "common.delete": "Usuń", "common.edit": "Edytuj", "portal.dashboard": "Panel", "portal.search": "Szukaj w portalu…", "portal.darkMode": "Ciemny motyw", "dashboard.title": "Panel", "dashboard.subtitle": "Przegląd utrzymania ruchu w czasie rzeczywistym", "dashboard.newCall": "Nowe zgłoszenie", "login.email": "E-mail", "login.password": "Hasło", "login.submit": "Zaloguj się", "login.title": "Logowanie"
+}

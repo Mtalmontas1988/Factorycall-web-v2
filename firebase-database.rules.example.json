@@ -1,0 +1,13 @@
+{
+  "rules": {
+    ".read": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'admin' || root.child('users').child(auth.uid).child('role').val() === 'administrator' || root.child('users').child(auth.uid).child('role').val() === 'vadovas' || root.child('users').child(auth.uid).child('role').val() === 'manager')",
+    "calls": {
+      ".write": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'admin' || root.child('users').child(auth.uid).child('role').val() === 'administrator' || root.child('users').child(auth.uid).child('role').val() === 'vadovas' || root.child('users').child(auth.uid).child('role').val() === 'manager')"
+    },
+    "technicians": { ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'" },
+    "operators": { ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'" },
+    "companies": { ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'" },
+    "lines": { ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'" },
+    "problems": { ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'" }
+  }
+}

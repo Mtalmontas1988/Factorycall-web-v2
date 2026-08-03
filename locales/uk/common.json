@@ -1,0 +1,3 @@
+{
+  "common.language": "Мова", "common.save": "Зберегти", "common.cancel": "Скасувати", "common.search": "Пошук", "common.loading": "Завантаження…", "common.error": "Сталася помилка", "common.delete": "Видалити", "common.edit": "Редагувати", "portal.dashboard": "Панель", "portal.search": "Пошук у порталі…", "portal.darkMode": "Темний режим", "dashboard.title": "Панель", "dashboard.subtitle": "Огляд обслуговування виробництва в реальному часі", "dashboard.newCall": "Новий виклик", "login.email": "Ел. пошта", "login.password": "Пароль", "login.submit": "Увійти", "login.title": "Вхід"
+}

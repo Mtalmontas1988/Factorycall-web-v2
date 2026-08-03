@@ -1,0 +1,3 @@
+{
+  "common.language": "Sprache", "common.save": "Speichern", "common.cancel": "Abbrechen", "common.search": "Suchen", "common.loading": "Wird geladen…", "common.error": "Ein Fehler ist aufgetreten", "common.delete": "Löschen", "common.edit": "Bearbeiten", "portal.dashboard": "Dashboard", "portal.search": "Portal durchsuchen…", "portal.darkMode": "Dunkelmodus", "dashboard.title": "Dashboard", "dashboard.subtitle": "Produktionswartung in Echtzeit", "dashboard.newCall": "Neuer Auftrag", "login.email": "E-Mail", "login.password": "Passwort", "login.submit": "Anmelden", "login.title": "Anmeldung"
+}
