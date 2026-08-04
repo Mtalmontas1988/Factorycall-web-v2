@@ -8,17 +8,18 @@ import type { DeviceToken } from '../types/firebase-models';
 export function useTokens(enabled: boolean) {
   const [items, setItems] = useState<DeviceToken[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) { setLoading(false); return; }
     let active = true;
-    setError(null);
+    setError(null); setLoading(true);
     return subscribeTokens(
       [],
-      data => { if (active) setItems(data); },
-      reason => { if (active) setError(reason.message); },
+      data => { if (active) { setItems(data); setLoading(false); } },
+      reason => { if (active) { setError(reason.message); setLoading(false); } },
     );
   }, [enabled]);
 
-  return { items, error };
+  return { items, error, loading };
 }

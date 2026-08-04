@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, type ReactElement } from 'react';
 import { useRouter } from 'next/navigation';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, Skeleton, Stack, Typography } from '@mui/material';
 import { subscribeCalls } from '../lib/firebase/calls-service';
 import { subscribeCompanies } from '../lib/firebase/companies-service';
 import { isFirebaseConfigured } from '../lib/firebase/firebase-config';
@@ -12,6 +12,8 @@ import { subscribeTechnicians } from '../lib/firebase/technicians-service';
 import { subscribeUsers } from '../lib/firebase/users-service';
 import { getUserRole, hasPortalRole } from '../lib/firebase/auth-service';
 import { useAuthContext } from './auth-context';
+import type { Locale } from '../i18n/i18n-provider';
+import { formatDateTime } from '../lib/format-date';
 import { modules as demoModules } from '../components/mock-data';
 import type { PortalModule } from '../components/portal-types';
 import type { Company, DeviceToken, FactoryCall, Operator, PortalUser, PreventiveWork, Problem, ProductionLine, Technician } from '../types/firebase-models';
@@ -22,7 +24,7 @@ const emptyOperators: Operator[] = [];
 const emptyTokens: DeviceToken[] = [];
 const emptyPreventiveWorks: PreventiveWork[] = [];
 
-export function useFactoryData() {
+export function useFactoryData(locale: Locale = 'lt') {
   const [calls, setCalls] = useState<FactoryCall[]>([]);
   const [technicians, setTechnicians] = useState<Technician[]>([]);
   const operators = emptyOperators;
@@ -74,23 +76,23 @@ export function useFactoryData() {
 
   const liveModules = useMemo(() => {
     const bySlug: Record<string, PortalModule> = {};
-    const callRows = calls.map(call => [text(call.callNumber ?? call.id), text(call.problem), text(call.line), text(call.priority), statusLabel(call.status), text(call.date ?? call.createdTime)]);
+    const callRows = calls.map(call => [text(call.callNumber ?? call.line ?? call.problem), text(call.problem), text(call.line), text(call.priority), statusLabel(call.status), formatDateTime(call.createdTime ?? call.date, locale)]);
     bySlug['is-kvietimai'] = { ...demoModules[0], rows: callRows };
-    bySlug['gyvi-is-kvietimai'] = { ...demoModules[1], rows: calls.filter(call => call.status !== 'completed').map(call => [text(call.callNumber ?? call.id), text(call.problem), text(call.line), text(call.priority), statusLabel(call.status), text(call.createdTime ?? call.date)]) };
-    bySlug.istorija = { ...demoModules[2], rows: calls.filter(call => call.status === 'completed').sort((a, b) => Number(b.completedTime ?? 0) - Number(a.completedTime ?? 0)).map(call => [text(call.callNumber ?? call.id), text(call.problem), text(call.line), text(call.priority), statusLabel(call.status), text(call.completedTime)]) };
-    bySlug.technikai = { ...demoModules.find(item => item.slug === 'technikai')!, rows: technicians.map(item => [text(item.id), text(item.name), text(item.lines), '—', item.active === false ? 'Neaktyvus' : 'Aktyvus', text(item.email)]) };
-    bySlug.operatoriai = { ...demoModules.find(item => item.slug === 'operatoriai')!, rows: operators.map(item => [text(item.id), text(item.name), '—', '—', item.active === false ? 'Neaktyvus' : 'Aktyvus', text(item.email)]) };
-    bySlug.imones = { ...demoModules.find(item => item.slug === 'imones')!, rows: companies.map(item => [text(item.companyCode ?? item.id), text(item.name), text(item.city), '—', 'Aktyvus', text(item.manager)]) };
-    bySlug.linijos = { ...demoModules.find(item => item.slug === 'linijos')!, rows: lines.map(item => [text(item.id), text(item.name), '—', '—', item.active === false ? 'Neaktyvus' : 'Aktyvus', '—']) };
-    bySlug.gedimai = { ...demoModules.find(item => item.slug === 'gedimai')!, rows: problems.map(item => [text(item.id), text(item.name), text(item.category), '—', item.active === false ? 'Neaktyvus' : 'Aktyvus', '—']) };
+    bySlug['gyvi-is-kvietimai'] = { ...demoModules[1], rows: calls.filter(call => call.status !== 'completed').map(call => [text(call.callNumber ?? call.line ?? call.problem), text(call.problem), text(call.line), text(call.priority), statusLabel(call.status), formatDateTime(call.createdTime ?? call.date, locale)]) };
+    bySlug.istorija = { ...demoModules[2], rows: calls.filter(call => call.status === 'completed').sort((a, b) => Number(b.completedTime ?? 0) - Number(a.completedTime ?? 0)).map(call => [text(call.callNumber ?? call.line ?? call.problem), text(call.problem), text(call.line), text(call.priority), statusLabel(call.status), formatDateTime(call.completedTime, locale)]) };
+    bySlug.technikai = { ...demoModules.find(item => item.slug === 'technikai')!, rows: technicians.map(item => [text(item.name ?? item.email), text(item.name), text(item.lines), '—', item.active === false ? 'Neaktyvus' : 'Aktyvus', text(item.email)]) };
+    bySlug.operatoriai = { ...demoModules.find(item => item.slug === 'operatoriai')!, rows: operators.map(item => [text(item.name ?? item.email), text(item.name), '—', '—', item.active === false ? 'Neaktyvus' : 'Aktyvus', text(item.email)]) };
+    bySlug.imones = { ...demoModules.find(item => item.slug === 'imones')!, rows: companies.map(item => [text(item.companyCode ?? item.name), text(item.name), text(item.city), '—', 'Aktyvus', text(item.manager)]) };
+    bySlug.linijos = { ...demoModules.find(item => item.slug === 'linijos')!, rows: lines.map(item => [text(item.code ?? item.name), text(item.name), '—', '—', item.active === false ? 'Neaktyvus' : 'Aktyvus', '—']) };
+    bySlug.gedimai = { ...demoModules.find(item => item.slug === 'gedimai')!, rows: problems.map(item => [text(item.code ?? item.name), text(item.name), text(item.category), '—', item.active === false ? 'Neaktyvus' : 'Aktyvus', '—']) };
     const statistics = demoModules.find(item => item.slug === 'statistika');
     if (statistics) bySlug.statistika = { ...statistics, rows: [['Visi iškvietimai', String(calls.length), '—', '—', 'Aktyvus', 'Visas laikotarpis'], ['Uždaryti iškvietimai', String(calls.filter(call => call.status === 'completed').length), '—', '—', 'Aktyvus', 'Visas laikotarpis']] };
     const usersModule = demoModules.find(item => item.slug === 'vartotojai');
-    if (usersModule) bySlug.vartotojai = { ...usersModule, rows: users.map(item => [text(item.id), text(item.name), text(item.email), text(item.role), item.online ? 'Aktyvus' : 'Neaktyvus', item.busy ? 'Užimtas' : '—']) };
+    if (usersModule) bySlug.vartotojai = { ...usersModule, rows: users.map(item => [text(item.name ?? item.email), text(item.name), text(item.email), text(item.role), item.online ? 'Aktyvus' : 'Neaktyvus', item.busy ? 'Užimtas' : '—']) };
     const notifications = demoModules.find(item => item.slug === 'pranesimai');
-    if (notifications) bySlug.pranesimai = { ...notifications, rows: tokens.map(item => [text(item.id), 'Registruotas įrenginys', text(item.userId), '—', 'Aktyvus', text(item.updatedAt)]) };
+    if (notifications) bySlug.pranesimai = { ...notifications, rows: tokens.map((item, index) => [`${index + 1}`, 'Registruotas įrenginys', '—', '—', 'Aktyvus', formatDateTime(item.updatedAt, locale)]) };
     return bySlug;
-  }, [calls, technicians, operators, companies, lines, problems, users, tokens]);
+  }, [calls, technicians, operators, companies, lines, problems, users, tokens, locale]);
   return { calls, technicians, operators, companies, lines, problems, users, tokens, preventiveWorks, liveModules, loading, error: false, listenerErrors, configured: isFirebaseConfigured() };
 }
 
@@ -109,6 +111,6 @@ export function PortalAccessGuard({ children }: { children: ReactElement }) {
     })();
     return () => { active = false; };
   }, [initialized, router, userId]);
-  if (!access) return <Box sx={{ minHeight: '100vh', bgcolor: '#11161d', color: 'white', display: 'grid', placeItems: 'center', gap: 1 }}><Box textAlign="center"><CircularProgress/><Typography mt={2}>Tikrinama prieiga…</Typography></Box></Box>;
+  if (!access) return <Box sx={{ minHeight: '100vh', bgcolor: '#11161d', color: 'white', display: 'grid', placeItems: 'center', p: 3 }}><Stack spacing={1.5} sx={{ width: 'min(420px, 100%)' }}><Skeleton variant="text" width="46%" height={38} /><Skeleton variant="rounded" height={52} /><Skeleton variant="rounded" height={52} /><Typography variant="body2" color="text.secondary">Tikrinama prieiga…</Typography></Stack></Box>;
   return children;
 }

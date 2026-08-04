@@ -18,6 +18,7 @@ type I18nValue = { locale: Locale; setLocale: (locale: Locale) => void; t: (key:
 const I18nContext = createContext<I18nValue | null>(null);
 const storageKey = 'factorycall.locale';
 const supported = (value?: string | null): value is Locale => Boolean(value && locales.includes(value.split('-')[0] as Locale));
+const missingText = (locale: Locale) => locale === 'en' ? 'Translation unavailable' : 'Vertimas nepasiekiamas';
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [locale, setCurrentLocale] = useState<Locale>('lt');
@@ -27,7 +28,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     locale,
     setLocale,
     t: (key, values) => {
-      const message = dictionaries[locale][key] ?? dictionaries.lt[key] ?? key;
+      const message = dictionaries[locale][key] ?? dictionaries.lt[key] ?? missingText(locale);
       return message.replace(/{{(\w+)}}/g, (_, name: string) => String(values?.[name] ?? `{{${name}}}`));
     }
   }), [locale]);

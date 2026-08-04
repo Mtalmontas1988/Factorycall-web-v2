@@ -33,6 +33,7 @@ import {
 } from '@mui/material';
 import { updateCall } from '../lib/firebase/calls-service';
 import { StandardDrawer as Drawer } from './standard-overlay';
+import { formatDateTimeForStoredLocale } from '../lib/format-date';
 import type { FactoryCall, Technician } from '../types/firebase-models';
 
 type Props = {
@@ -63,14 +64,7 @@ const priorityTone: Record<string, string> = {
   Žemas: '#8f9cad',
 };
 
-const asTime = (value?: number | string, fallback?: string) => {
-  if (typeof value === 'number') return new Date(value).toLocaleString('lt-LT');
-  if (typeof value === 'string' && value) {
-    const asNumber = Number(value);
-    return Number.isFinite(asNumber) && asNumber > 0 ? new Date(asNumber).toLocaleString('lt-LT') : value;
-  }
-  return fallback || '—';
-};
+const asTime = (value?: number | string, fallback?: string) => formatDateTimeForStoredLocale(value ?? fallback, fallback || '—');
 
 const callDate = (call: FactoryCall) => {
   const timestamp = Number(call.createdTime ?? call.createdAt ?? 0);
@@ -142,7 +136,7 @@ export function LiveCallsModule({ calls, technicians }: Props) {
     try {
       const existingComment = String(selected.technicianComment ?? selected.notes ?? '').trim();
       const appendedComment = comment.trim()
-        ? `${existingComment ? `${existingComment}\n\n` : ''}[${new Date().toLocaleString('lt-LT')}] ${comment.trim()}`
+        ? `${existingComment ? `${existingComment}\n\n` : ''}[${formatDateTimeForStoredLocale(Date.now())}] ${comment.trim()}`
         : existingComment;
       await updateCall(selected.id, {
         priority: draftPriority,
@@ -189,7 +183,7 @@ export function LiveCallsModule({ calls, technicians }: Props) {
           <Table stickyHeader size="small" sx={{ minWidth: 1200 }}>
             <TableHead><TableRow>{['ID', 'Įmonė', 'Linija', 'Gedimo tipas', 'Prioritetas', 'Būsena', 'Operatorius', 'Technikas', 'Sukūrimo laikas'].map(column => <TableCell key={column} sx={{ fontWeight: 750, color: 'text.secondary', borderColor: 'divider', whiteSpace: 'nowrap' }}>{column}</TableCell>)}</TableRow></TableHead>
             <TableBody>{visibleCalls.map(call => <TableRow hover key={call.id} onClick={() => openDetails(call)} sx={{ cursor: 'pointer', '&:last-child td': { borderBottom: 0 } }}>
-              <TableCell sx={{ color: 'primary.main', fontWeight: 700 }}>{call.callNumber ?? call.id ?? '—'}</TableCell><TableCell>{call.company || '—'}</TableCell><TableCell>{call.line || '—'}</TableCell><TableCell>{call.problem || call.title || '—'}</TableCell>
+              <TableCell sx={{ color: 'primary.main', fontWeight: 700 }}>{call.callNumber || '—'}</TableCell><TableCell>{call.company || '—'}</TableCell><TableCell>{call.line || '—'}</TableCell><TableCell>{call.problem || call.title || '—'}</TableCell>
               <TableCell><Chip size="small" label={call.priority || 'Nenurodyta'} sx={{ color: priorityTone[String(call.priority)] ?? '#8f9cad', bgcolor: `${priorityTone[String(call.priority)] ?? '#8f9cad'}22` }} /></TableCell>
               <TableCell><Chip size="small" label={statusLabel(call.status)} color={statusKey(call.status) === 'completed' ? 'success' : statusKey(call.status) === 'waiting' ? 'warning' : 'info'} /></TableCell>
               <TableCell>{call.operator || '—'}</TableCell><TableCell>{call.technician || 'Nepriskirtas'}</TableCell><TableCell>{asTime(call.createdTime ?? call.createdAt, call.date)}</TableCell>
@@ -202,10 +196,10 @@ export function LiveCallsModule({ calls, technicians }: Props) {
 
       <Drawer anchor="right" open={Boolean(selected)} onClose={() => setSelected(null)} PaperProps={{ sx: { width: { xs: '100%', sm: 560 }, bgcolor: 'background.paper' } }}>
         {selected && <Stack sx={{ height: '100%' }}>
-          <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ px: 2.5, py: 2, borderBottom: '1px solid #293342' }}><Box><Typography variant="h6">Iškvietimo detalės</Typography><Typography variant="caption" color="text.secondary">{selected.callNumber ?? selected.id}</Typography></Box><IconButton onClick={() => setSelected(null)}><Close /></IconButton></Stack>
+          <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ px: 2.5, py: 2, borderBottom: '1px solid #293342' }}><Box><Typography variant="h6">Iškvietimo detalės</Typography><Typography variant="caption" color="text.secondary">{selected.callNumber || selected.line || selected.problem || 'Iškvietimas'}</Typography></Box><IconButton onClick={() => setSelected(null)}><Close /></IconButton></Stack>
           <Box sx={{ overflowY: 'auto', p: 2.5, flexGrow: 1 }}>
             <Stack spacing={2.5}>
-              <Box><Typography variant="subtitle2" mb={1}>Pagrindinė informacija</Typography><Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 2 }}><DetailValue label="ID" value={selected.id} /><DetailValue label="Įmonė" value={selected.company} /><DetailValue label="Linija" value={selected.line} /><DetailValue label="Gedimo tipas" value={selected.problem ?? selected.title} /><DetailValue label="Operatorius / sukūrė" value={selected.operator} /><DetailValue label="Priskirtas technikas" value={selected.technician} /><DetailValue label="Aprašymas" value={selected.description} /><DetailValue label="Komentaras" value={selected.technicianComment ?? selected.notes} /></Box></Box>
+              <Box><Typography variant="subtitle2" mb={1}>Pagrindinė informacija</Typography><Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 2 }}><DetailValue label="Iškvietimo numeris" value={selected.callNumber || selected.line || selected.problem} /><DetailValue label="Įmonė" value={selected.company} /><DetailValue label="Linija" value={selected.line} /><DetailValue label="Gedimo tipas" value={selected.problem ?? selected.title} /><DetailValue label="Operatorius / sukūrė" value={selected.operator} /><DetailValue label="Priskirtas technikas" value={selected.technician} /><DetailValue label="Aprašymas" value={selected.description} /><DetailValue label="Komentaras" value={selected.technicianComment ?? selected.notes} /></Box></Box>
               <Divider />
               <Box><Typography variant="subtitle2" mb={1}>Laikai</Typography><Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 2 }}><DetailValue label="Sukurta" value={asTime(selected.createdTime ?? selected.createdAt, selected.date)} /><DetailValue label="Priimta" value={asTime(selected.acceptedTime)} /><DetailValue label="Atvyko" value={asTime(selected.arrivedTime)} /><DetailValue label="Pradėtas remontas" value={asTime(selected.startedRepairTime)} /><DetailValue label="Užbaigta" value={asTime(selected.completedTime)} /><DetailValue label="Reakcijos laikas" value={selected.responseTime} /><DetailValue label="Remonto laikas" value={selected.repairTime} /><DetailValue label="Prastova" value={selected.totalDowntime} /></Box></Box>
               <Divider />
@@ -213,7 +207,7 @@ export function LiveCallsModule({ calls, technicians }: Props) {
               {selectedImages.length > 0 && <Box><Typography variant="subtitle2" mb={1}>Nuotraukos</Typography><Stack direction="row" sx={{ flexWrap: 'wrap', gap: 1 }}>{selectedImages.map((url, index) => <Box key={`${url}-${index}`} component="a" href={url} target="_blank" rel="noreferrer" sx={{ width: 120, height: 90, borderRadius: 1.5, overflow: 'hidden', bgcolor: '#202938', display: 'grid', placeItems: 'center' }}><Box component="img" src={url} alt={`Iškvietimo nuotrauka ${index + 1}`} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} /></Box>)}</Stack></Box>}
               {!selectedImages.length && <Stack direction="row" spacing={1} alignItems="center" color="text.secondary"><ImageOutlined fontSize="small" /><Typography variant="body2">Nuotraukų nėra.</Typography></Stack>}
               <Divider />
-              <Box><Typography variant="subtitle2" mb={1}>Visi įrašo laukai</Typography><Stack spacing={1}>{Object.entries(selected).map(([key, value]) => <Box key={key} sx={{ p: 1.25, borderRadius: 1.5, bgcolor: '#202938' }}><Typography variant="caption" color="text.secondary">{key}</Typography><Typography variant="body2" component="pre" sx={{ m: 0, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', fontFamily: 'inherit' }}>{recordValue(value)}</Typography></Box>)}</Stack></Box>
+              <Box><Typography variant="subtitle2" mb={1}>Papildoma informacija</Typography><Stack spacing={1}>{Object.entries(selected).filter(([key]) => !['id', 'uid', 'companyId', 'lineId', 'technicianId', 'operatorId'].includes(key)).map(([key, value]) => <Box key={key} sx={{ p: 1.25, borderRadius: 1.5, bgcolor: '#202938' }}><Typography variant="caption" color="text.secondary">{key}</Typography><Typography variant="body2" component="pre" sx={{ m: 0, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', fontFamily: 'inherit' }}>{recordValue(value)}</Typography></Box>)}</Stack></Box>
             </Stack>
           </Box>
           <Stack direction="row" justifyContent="flex-end" spacing={1.25} sx={{ p: 2.5, borderTop: '1px solid #293342' }}><Button onClick={() => setSelected(null)} disabled={saving}>Atšaukti</Button><Button variant="contained" onClick={saveChanges} disabled={saving}>{saving ? 'Saugoma…' : 'Išsaugoti pakeitimus'}</Button></Stack>

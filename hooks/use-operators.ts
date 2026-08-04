@@ -8,17 +8,18 @@ import type { Operator } from '../types/firebase-models';
 export function useOperators(enabled: boolean, fallback: Operator[] = []) {
   const [operators, setOperators] = useState<Operator[]>(fallback);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) { setLoading(false); return; }
     let active = true;
-    setError(null);
+    setError(null); setLoading(true);
     return subscribeOperators(
       [],
-      items => { if (active) setOperators(items); },
-      reason => { if (active) setError(reason.message); },
+      items => { if (active) { setOperators(items); setLoading(false); } },
+      reason => { if (active) { setError(reason.message); setLoading(false); } },
     );
   }, [enabled]);
 
-  return { operators, error };
+  return { operators, error, loading };
 }

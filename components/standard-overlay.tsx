@@ -28,24 +28,24 @@ type StandardDrawerProps = Omit<DrawerProps, 'children'> & {
 export function StandardDrawer({ title, children, footer, onClose, PaperProps, ...props }: StandardDrawerProps) {
   const paperSx = PaperProps?.sx;
   if (!title) {
-    return <Drawer {...props} onClose={onClose} PaperProps={{ ...PaperProps, sx: { ...paperSx, width: { xs: '100%', sm: STANDARD_DRAWER_WIDTH }, bgcolor: 'background.paper' } }}>{children}</Drawer>;
+    return <Drawer {...props} onClose={onClose} PaperProps={{ ...PaperProps, sx: { ...paperSx, width: { xs: '100%', sm: STANDARD_DRAWER_WIDTH }, maxWidth: '100vw', bgcolor: 'background.paper' } }}>{children}</Drawer>;
   }
   return (
     <Drawer
       anchor="right"
       onClose={onClose}
-      PaperProps={{ ...PaperProps, sx: { ...paperSx, width: { xs: '100%', sm: STANDARD_DRAWER_WIDTH }, bgcolor: 'background.paper' } }}
+      PaperProps={{ ...PaperProps, sx: { ...paperSx, width: { xs: '100%', sm: STANDARD_DRAWER_WIDTH }, maxWidth: '100vw', bgcolor: 'background.paper' } }}
       {...props}
     >
       <Stack sx={{ height: '100%' }}>
-        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ p: 2.5, borderBottom: '1px solid', borderColor: 'divider' }}>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ p: { xs: 2, sm: 2.5 }, gap: 1, borderBottom: '1px solid', borderColor: 'divider' }}>
           <Typography variant="h6">{title}</Typography>
           <IconButton aria-label="Uždaryti" onClick={() => onClose?.({}, 'backdropClick')}>
             <Close />
           </IconButton>
         </Stack>
-        <Box sx={{ flexGrow: 1, overflowY: 'auto', p: 2.5 }}>{children}</Box>
-        {footer ? <Box sx={{ p: 2.5, borderTop: '1px solid', borderColor: 'divider' }}>{footer}</Box> : null}
+        <Box sx={{ flexGrow: 1, overflowY: 'auto', overflowX: 'hidden', p: { xs: 2, sm: 2.5 } }}>{children}</Box>
+        {footer ? <Box sx={{ p: { xs: 2, sm: 2.5 }, borderTop: '1px solid', borderColor: 'divider' }}>{footer}</Box> : null}
       </Stack>
     </Drawer>
   );
@@ -61,7 +61,7 @@ type StandardDialogProps = Omit<DialogProps, 'children'> & {
 export function UniversalDialog({ title, children, actions, onClose, ...props }: StandardDialogProps) {
   if (!title) return <Dialog onClose={onClose} {...props}>{children}</Dialog>;
   return (
-    <Dialog fullWidth maxWidth="sm" onClose={onClose} {...props}>
+    <Dialog fullWidth maxWidth="sm" onClose={onClose} {...props} PaperProps={{ sx: { width: { xs: 'calc(100% - 24px)', sm: undefined }, m: { xs: 1.5, sm: 4 }, maxHeight: 'calc(100dvh - 24px)' } }}>
       <DialogTitle>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Box>{title}</Box>
@@ -70,7 +70,7 @@ export function UniversalDialog({ title, children, actions, onClose, ...props }:
           </IconButton>
         </Stack>
       </DialogTitle>
-      <DialogContent dividers>{children}</DialogContent>
+      <DialogContent dividers sx={{ px: { xs: 2, sm: 3 }, py: { xs: 2, sm: 2.5 } }}>{children}</DialogContent>
       {actions ? <DialogActions>{actions}</DialogActions> : null}
     </Dialog>
   );

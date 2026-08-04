@@ -1,3 +1,26 @@
 * { box-sizing: border-box; }
-html, body { margin: 0; min-height: 100%; }
+html, body { margin: 0; min-height: 100%; max-width: 100%; overflow-x: hidden; }
 body { background: #11161d; }
+
+/* Keep wide data sets contained inside their cards on every viewport. */
+.MuiTableContainer-root { max-width: 100%; overflow-x: auto; overscroll-behavior-inline: contain; -webkit-overflow-scrolling: touch; }
+.MuiTablePagination-toolbar { flex-wrap: wrap; row-gap: 4px; }
+
+/* Shared mobile safeguards for every portal page and overlay. */
+.MuiTable-root { max-width: 100%; }
+.MuiDialog-paper { max-height: calc(100dvh - 24px); }
+.MuiDrawer-paper { max-width: 100vw; }
+
+@media (max-width: 599.95px) {
+  .MuiAppBar-root .MuiToolbar-root { min-height: 60px; padding-inline: 8px; gap: 4px; }
+  .MuiAppBar-root .MuiTextField-root { display: none; }
+  .MuiDialog-paper { width: calc(100% - 24px); margin: 12px; }
+  .MuiDialogTitle-root { padding: 16px; }
+  .MuiDialogContent-root { padding: 16px; }
+  .MuiDialogActions-root { padding: 12px 16px; flex-wrap: wrap; }
+  .MuiDrawer-paper .MuiButton-root { max-width: 100%; }
+  .MuiTablePagination-toolbar { justify-content: center; padding-inline: 8px; }
+  .MuiTablePagination-spacer { display: none; }
+  .MuiTablePagination-selectLabel,
+  .MuiTablePagination-displayedRows { margin-inline: 4px; }
+}
