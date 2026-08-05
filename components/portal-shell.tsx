@@ -81,13 +81,31 @@ function Sidebar({ close, expanded, onExpand }: {
         <Box
             onMouseEnter={() => onExpand(true)}
             onMouseLeave={() => onExpand(false)}
-            sx={{ height: '100%', bgcolor: '#151b24', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
+            sx={{
+                height: '100vh',
+                '@supports (height: 100dvh)': { height: '100dvh' },
+                bgcolor: '#151b24',
+                display: 'flex',
+                flexDirection: 'column',
+                overflow: 'hidden',
+            }}
         >
             <Box sx={{ minHeight: 76, px: expanded ? 2.25 : 1.25, display: 'flex', alignItems: 'center', justifyContent: expanded ? 'space-between' : 'center' }}>
                 {expanded ? <BrandLogo width={190} /> : <BrandLogo compact />}
                 {expanded && <IconButton onClick={close} sx={{ display: { md: 'none' } }}><Close /></IconButton>}
             </Box>
-            <Box sx={{ px: 1.25 }}>
+            <Box
+                tabIndex={0}
+                sx={{
+                    flexGrow: 1,
+                    minHeight: 0,
+                    px: 1.25,
+                    overflowY: 'auto',
+                    overflowX: 'hidden',
+                    overscrollBehavior: 'contain',
+                    WebkitOverflowScrolling: 'touch',
+                }}
+            >
                 <List dense>
                     <Tooltip title={expanded ? '' : t('navigation.dashboard')} placement="right">
                         <ListItemButton onClick={() => router.push('/')} selected={pathname === '/'} sx={{ minHeight: 44, justifyContent: expanded ? 'initial' : 'center', borderRadius: 2, mb: .5, '&.Mui-selected': { bgcolor: '#254b78' } }}>

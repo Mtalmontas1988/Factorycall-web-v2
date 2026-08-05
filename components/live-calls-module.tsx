@@ -3,7 +3,6 @@
 import { useMemo, useState } from 'react';
 import {
   Close,
-  FilterListOutlined,
   ImageOutlined,
   Search,
 } from '@mui/icons-material';
@@ -33,6 +32,7 @@ import {
 } from '@mui/material';
 import { updateCall } from '../lib/firebase/calls-service';
 import { StandardDrawer as Drawer } from './standard-overlay';
+import { EmptyState } from './empty-state';
 import { formatDateTimeForStoredLocale } from '../lib/format-date';
 import type { FactoryCall, Technician } from '../types/firebase-models';
 
@@ -190,7 +190,7 @@ export function LiveCallsModule({ calls, technicians }: Props) {
             </TableRow>)}</TableBody>
           </Table>
         </TableContainer>
-        {!filteredCalls.length && <Stack alignItems="center" spacing={1} sx={{ py: 7 }}><FilterListOutlined color="disabled" sx={{ fontSize: 38 }} /><Typography fontWeight={700}>Iškvietimų nerasta</Typography><Typography variant="body2" color="text.secondary">Pakeiskite filtrus arba paieškos frazę.</Typography></Stack>}
+        {!filteredCalls.length && <Box sx={{ p: 2 }}><EmptyState title="Iškvietimų nerasta" description="Pakeiskite filtrus arba paieškos frazę." kind="calls" compact /></Box>}
         <TablePagination component="div" count={filteredCalls.length} page={page} rowsPerPage={rowsPerPage} rowsPerPageOptions={[rowsPerPage]} onPageChange={(_, nextPage) => setPage(nextPage)} labelDisplayedRows={({ from, to, count }) => `${from}–${to} iš ${count}`} />
       </Paper>
 
