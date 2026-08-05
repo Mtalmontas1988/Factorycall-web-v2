@@ -2,12 +2,16 @@
 html, body { margin: 0; min-height: 100%; max-width: 100%; overflow-x: hidden; }
 body { background: #11161d; }
 
+/* Theme switching is not enabled yet; do not expose an inert control. */
+.MuiAppBar-root button:has([data-testid="Brightness4OutlinedIcon"]) { display: none; }
+
 /* Keep wide data sets contained inside their cards on every viewport. */
 .MuiTableContainer-root { max-width: 100%; overflow-x: auto; overscroll-behavior-inline: contain; -webkit-overflow-scrolling: touch; }
 .MuiTablePagination-toolbar { flex-wrap: wrap; row-gap: 4px; }
 
 /* Shared mobile safeguards for every portal page and overlay. */
 .MuiTable-root { max-width: 100%; }
+[flexwrap="wrap"] { flex-wrap: wrap; }
 .MuiDialog-paper { max-height: calc(100dvh - 24px); }
 .MuiDrawer-paper { max-width: 100vw; }
 

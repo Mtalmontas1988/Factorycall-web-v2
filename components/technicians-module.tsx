@@ -38,10 +38,10 @@ export function TechniciansModule({ technicians, users, calls }: Props) {
   const allLines = useMemo(() => Array.from(new Set(technicians.flatMap(item => String(item.lines ?? '').split(',').map(value => value.trim()).filter(Boolean)))).sort(), [technicians]);
   const enriched = useMemo(() => technicians.map(technician => {
     const user = users.find(item => matchesUser(technician, item));
-    const identifier = technician.id ?? technician.uid ?? '';
+    const identifiers = [technician.id, technician.uid, technician.email].filter(Boolean);
     const displayName = nameOf(technician);
-    const relatedCalls = calls.filter(call => call.technicianId === identifier || call.technician === displayName || (technician.email && call.technician === technician.email));
-    return { technician, user, activeCalls: relatedCalls.filter(call => activeCall(call.status)).length, completedToday: relatedCalls.filter(call => completed(call.status) && isToday(call.completedTime)).length };
+    const relatedCalls = calls.filter(call => identifiers.includes(call.technicianId) || call.technician === displayName || (technician.email && call.technician === technician.email));
+    return { technician, user, activeCalls: relatedCalls.filter(call => activeCall(call.status)).length, completedToday: relatedCalls.filter(call => completed(call.status) && isToday(call.completedTime ?? call.resolvedAt ?? call.updatedAt ?? call.createdTime)).length };
   }), [calls, technicians, users]);
   const filtered = useMemo(() => enriched.filter(({ technician }) => {
     const text = `${nameOf(technician)} ${technician.email ?? ''} ${technician.phone ?? ''} ${(technician.skills ?? []).join(' ')} ${technician.lines ?? ''}`.toLocaleLowerCase('lt-LT');

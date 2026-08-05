@@ -14,6 +14,7 @@ import type { Company, DeviceToken, FactoryCall, Operator, PortalUser, Problem, 
 import { RecordManagementModule, type ManagedField } from './record-management-module';
 import { DetailedRecordModule, type DetailField } from './detailed-record-module';
 import { formatDateTimeForStoredLocale } from '../lib/format-date';
+import { EmptyState } from './empty-state';
 
 const companyFields: ManagedField<Company>[] = [{ key: 'name', label: 'Pavadinimas', required: true }, { key: 'companyCode', label: 'Kodas' }, { key: 'city', label: 'Miestas' }, { key: 'manager', label: 'Atsakingas asmuo' }, { key: 'email', label: 'El. paštas', type: 'email' }, { key: 'phone', label: 'Telefonas' }, { key: 'logoUrl', label: 'Logotipo URL' }];
 const userFields: ManagedField<PortalUser>[] = [{ key: 'name', label: 'Vardas' }, { key: 'email', label: 'El. paštas', type: 'email' }, { key: 'role', label: 'Rolė', required: true }];
@@ -36,6 +37,33 @@ export function FcmDiagnosticsModule({ tokens, users }: { tokens: DeviceToken[];
 }
 
 export function StatisticsModule({ calls, technicians, operators }: { calls: FactoryCall[]; technicians: unknown[]; operators: unknown[] }) {
-  const data = useMemo(() => { const count = (values: string[]) => calls.filter(call => values.includes(String(call.status ?? '').toLowerCase())).length; return [{ name: 'Laukia', value: count(['waiting', 'naujas']), color: '#ffb54c' }, { name: 'Vykdomi', value: count(['repairing', 'vykdomas', 'accepted', 'priskirtas']), color: '#4b9cff' }, { name: 'Užbaigti', value: count(['completed', 'užbaigtas', 'uždarytas']), color: '#38d996' }]; }, [calls]);
-  return <><Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" alignItems={{ md: 'center' }} spacing={2} mb={3}><Box><Typography variant="h4">Statistika</Typography><Typography variant="body2" color="text.secondary" mt={0.5}>Realių iškvietimų ir komandos duomenų suvestinė</Typography></Box></Stack><Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, gap: 2.5, mb: 2.5 }}><Paper sx={{ p: 2.5, border: '1px solid #293342' }}><Typography color="text.secondary">Visi iškvietimai</Typography><Typography variant="h4" mt={1}>{calls.length}</Typography></Paper><Paper sx={{ p: 2.5, border: '1px solid #293342' }}><Typography color="text.secondary">Technikai</Typography><Typography variant="h4" mt={1}>{technicians.length}</Typography></Paper><Paper sx={{ p: 2.5, border: '1px solid #293342' }}><Typography color="text.secondary">Operatoriai</Typography><Typography variant="h4" mt={1}>{operators.length}</Typography></Paper></Box><Paper sx={{ p: 2.5, border: '1px solid #293342', height: 340 }}><Typography fontWeight={700}>Iškvietimų būsenos</Typography><ResponsiveContainer width="100%" height="90%"><PieChart><Pie data={data} dataKey="value" nameKey="name" innerRadius={65} outerRadius={105}>{data.map(item => <Cell key={item.name} fill={item.color} />)}</Pie><ChartTooltip /></PieChart></ResponsiveContainer></Paper></>;
+  const data = useMemo(() => {
+    const count = (values: string[]) => calls.filter(call => values.includes(String(call.status ?? '').trim().toLocaleLowerCase('lt-LT'))).length;
+    return [
+      { name: 'Laukia', value: count(['waiting', 'naujas', 'laukia techniko']), color: '#ffb54c' },
+      { name: 'Vykdomi', value: count(['repairing', 'vykdomas', 'accepted', 'priskirtas', 'remontas pradėtas']), color: '#4b9cff' },
+      { name: 'Užbaigti', value: count(['completed', 'užbaigtas', 'uždarytas']), color: '#38d996' },
+    ];
+  }, [calls]);
+  const total = calls.length;
+  const percentage = (value: number) => total ? Math.round((value / total) * 100) : 0;
+
+  return <Stack spacing={2.5}>
+    <Box><Typography variant="h4">Statistika</Typography><Typography variant="body2" color="text.secondary" mt={0.5}>Realių iškvietimų ir komandos duomenų suvestinė</Typography></Box>
+    {!total ? <EmptyState title="Statistikos duomenų dar nėra" description="Diagramos ir procentai bus rodomi, kai Firebase bus bent vienas iškvietimas." kind="calls" /> : <>
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, gap: 2.5 }}>
+        <Paper sx={{ p: 2.5, border: '1px solid #293342' }}><Typography color="text.secondary">Visi iškvietimai</Typography><Typography variant="h4" mt={1}>{total}</Typography></Paper>
+        <Paper sx={{ p: 2.5, border: '1px solid #293342' }}><Typography color="text.secondary">Technikai</Typography><Typography variant="h4" mt={1}>{technicians.length}</Typography></Paper>
+        <Paper sx={{ p: 2.5, border: '1px solid #293342' }}><Typography color="text.secondary">Operatoriai</Typography><Typography variant="h4" mt={1}>{operators.length}</Typography></Paper>
+      </Box>
+      <Paper sx={{ p: 2.5, border: '1px solid #293342' }}>
+        <Typography fontWeight={700}>Iškvietimų būsenos</Typography>
+        <Typography variant="body2" color="text.secondary" mt={0.5}>Užveskite pelę ant diagramos, kad matytumėte tikslų skaičių.</Typography>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'minmax(260px, 1fr) minmax(240px, .7fr)' }, alignItems: 'center', gap: 2, minHeight: 310 }}>
+          <ResponsiveContainer width="100%" height={300}><PieChart><Pie data={data} dataKey="value" nameKey="name" innerRadius={65} outerRadius={105} paddingAngle={3}>{data.map(item => <Cell key={item.name} fill={item.color} />)}</Pie><ChartTooltip contentStyle={{ background: '#202936', border: '1px solid #344255', borderRadius: 10 }} formatter={(value: number, name: string) => [`${value} (${percentage(value)}%)`, name]} /></PieChart></ResponsiveContainer>
+          <Stack spacing={1.25}>{data.map(item => <Stack key={item.name} direction="row" alignItems="center" justifyContent="space-between" sx={{ p: 1.25, border: '1px solid #293342', borderRadius: 2 }}><Stack direction="row" spacing={1} alignItems="center"><Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: item.color }} /><Typography variant="body2" fontWeight={700}>{item.name}</Typography></Stack><Typography variant="body2" color="text.secondary">{item.value} · {percentage(item.value)}%</Typography></Stack>)}</Stack>
+        </Box>
+      </Paper>
+    </>}
+  </Stack>;
 }

@@ -9,5 +9,18 @@
     "companies": { ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'" },
     "lines": { ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'" },
     "problems": { ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'" }
+    ,"assets": {
+      ".read": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'admin' || root.child('users').child(auth.uid).child('role').val() === 'administrator' || root.child('users').child(auth.uid).child('role').val() === 'vadovas' || root.child('users').child(auth.uid).child('role').val() === 'manager')",
+      ".write": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'admin' || root.child('users').child(auth.uid).child('role').val() === 'administrator' || root.child('users').child(auth.uid).child('role').val() === 'vadovas' || root.child('users').child(auth.uid).child('role').val() === 'manager')"
+    }
+    ,"notifications": {
+      ".read": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'admin' || root.child('users').child(auth.uid).child('role').val() === 'administrator' || root.child('users').child(auth.uid).child('role').val() === 'vadovas' || root.child('users').child(auth.uid).child('role').val() === 'manager')",
+      ".write": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'admin' || root.child('users').child(auth.uid).child('role').val() === 'administrator' || root.child('users').child(auth.uid).child('role').val() === 'vadovas' || root.child('users').child(auth.uid).child('role').val() === 'manager')",
+      ".indexOn": ["recipientUserId"]
+    }
+    ,"photoStandards": {
+      ".read": "auth != null",
+      ".write": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'admin' || root.child('users').child(auth.uid).child('role').val() === 'administrator')"
+    }
   }
 }

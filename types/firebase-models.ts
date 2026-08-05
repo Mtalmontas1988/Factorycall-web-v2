@@ -55,6 +55,14 @@ export interface Asset extends FirebaseRecord {
 /** Existing /notifications records. The portal only updates read/dismissed flags; it never deletes notifications. */
 export interface FactoryNotification extends FirebaseRecord { title?: string; message?: string; body?: string; eventType?: string; callId?: FirebaseId; read?: boolean; dismissed?: boolean; priority?: Priority; createdTime?: TimestampValue; }
 export interface AppNotification extends FirebaseRecord { id: FirebaseId; eventType: string; entityId: string; callId: string; preventiveWorkId: string; title: string; body: string; recipientUserId: string; recipientRole: string; createdTime: number; read: boolean; dismissed: boolean; dismissedAt: number; source: string; }
+export interface PhotoStandardCategory extends FirebaseRecord { id: FirebaseId; name: string; description: string; sortOrder: number; active: boolean; }
+export interface PhotoStandardProduct extends FirebaseRecord {
+  id: FirebaseId;
+  categoryId: FirebaseId; companyId: FirebaseId; lineIds: FirebaseId[]; assetIds: FirebaseId[];
+  title: string; shortDescription: string; productCode: string; film: string; weight: string;
+  packageType: string; barcode: string; notes: string; imageUrls: string[]; pdfUrl: string;
+  videoUrl: string; active: boolean;
+}
 
 export type FirebaseRootPaths = {
   calls: 'calls' | 'serviceCalls' | 'issues'; technicians: 'technicians'; operators: 'operators';

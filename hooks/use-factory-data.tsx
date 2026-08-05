@@ -25,6 +25,7 @@ const emptyTokens: DeviceToken[] = [];
 const emptyPreventiveWorks: PreventiveWork[] = [];
 
 export function useFactoryData(locale: Locale = 'lt') {
+  const { initialized, userId } = useAuthContext();
   const [calls, setCalls] = useState<FactoryCall[]>([]);
   const [technicians, setTechnicians] = useState<Technician[]>([]);
   const operators = emptyOperators;
@@ -39,6 +40,8 @@ export function useFactoryData(locale: Locale = 'lt') {
 
   useEffect(() => {
     if (!isFirebaseConfigured()) { setLoading(false); return; }
+    if (!initialized) { setLoading(true); return; }
+    if (!userId) { setLoading(false); return; }
     let active = true;
     let remaining = 6;
     const completedPaths = new Set<string>();
@@ -72,7 +75,7 @@ export function useFactoryData(locale: Locale = 'lt') {
       subscribeUsers([], received('users', setUsers), failed('users')),
     ];
     return () => { active = false; unsubscribers.forEach(unsubscribe => unsubscribe()); };
-  }, []);
+  }, [initialized, userId]);
 
   const liveModules = useMemo(() => {
     const bySlug: Record<string, PortalModule> = {};

@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import {
   Close,
   ImageOutlined,
@@ -88,7 +89,8 @@ const recordValue = (value: unknown) => {
 };
 
 export function LiveCallsModule({ calls, technicians }: Props) {
-  const [query, setQuery] = useState('');
+  const searchParams = useSearchParams();
+  const [query, setQuery] = useState(() => searchParams.get('query') ?? '');
   const [status, setStatus] = useState<StatusFilter>('all');
   const [priority, setPriority] = useState('all');
   const [line, setLine] = useState('all');
